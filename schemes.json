@@ -1,0 +1,26 @@
+{
+  "schemes": [
+    {
+      "category": "Farmer",
+      "name": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+      "eligibility": {
+        "income": "All income groups",
+        "land_holding": "All landholding farmers",
+        "caste": "All categories"
+      },
+      "benefits": "₹6,000 per year in three equal installments",
+      "link": "https://pmkisan.gov.in/"
+    },
+    {
+      "category": "Student",
+      "name": "National Means cum Merit Scholarship Scheme (NMMSS)",
+      "eligibility": {
+        "education_level": "Class 9-12",
+        "income": "Below ₹3.5 lakh",
+        "caste": "All categories"
+      },
+      "benefits": "₹12,000 per year",
+      "link": "https://scholarships.gov.in/"
+    }
+  ]
+}
