@@ -21,14 +21,13 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .hidden { display: none; } /* Hides fields dynamically */
+        .hidden { display: none; }
     </style>
 </head>
 <body>
     <div class="calculator-container">
         <h2 class="mb-4 text-center">Government Scheme Eligibility Checker</h2>
         
-        <!-- Eligibility Form -->
         <form id="eligibilityForm" class="row g-3">
             <div class="col-md-6">
                 <label for="age" class="form-label">Age</label>
@@ -72,39 +71,6 @@
                 </select>
             </div>
 
-            <!-- Landholding Size (Only for Farmers) -->
-            <div class="col-md-6 hidden" id="landholding-field">
-                <label for="landholding" class="form-label">Landholding Size (Acres)</label>
-                <input type="number" class="form-control" id="landholding">
-            </div>
-
-            <!-- Education Level (Only for Students) -->
-            <div class="col-md-6 hidden" id="education-level-field">
-                <label for="educationLevel" class="form-label">Education Level</label>
-                <select class="form-select" id="educationLevel">
-                    <option value="">Select Level</option>
-                    <option value="Primary">Primary (1-5)</option>
-                    <option value="Middle">Middle (6-8)</option>
-                    <option value="HighSchool">High School (9-10)</option>
-                    <option value="HigherSecondary">Higher Secondary (11-12)</option>
-                    <option value="Undergraduate">Undergraduate</option>
-                    <option value="Postgraduate">Postgraduate</option>
-                </select>
-            </div>
-
-            <!-- Stream Selection (Only for Undergraduate & Postgraduate Students) -->
-            <div class="col-md-6 hidden" id="stream-field">
-                <label for="stream" class="form-label">Stream</label>
-                <select class="form-select" id="stream">
-                    <option value="">Select Stream</option>
-                    <option value="Engineering">Engineering</option>
-                    <option value="Medical">Medical</option>
-                    <option value="Commerce">Commerce</option>
-                    <option value="Arts">Arts</option>
-                    <option value="Science">Science</option>
-                </select>
-            </div>
-
             <div class="col-12 text-center">
                 <button type="submit" class="btn btn-primary me-2">Check Eligibility</button>
                 <button type="reset" class="btn btn-secondary">Reset</button>
@@ -115,32 +81,57 @@
     </div>
 
     <script>
-        document.getElementById('profession').addEventListener('change', function() {
-            const profession = this.value;
-            document.getElementById('landholding-field').classList.toggle('hidden', profession !== "Farmer");
-            document.getElementById('education-level-field').classList.toggle('hidden', profession !== "Student");
-        });
-
-        document.getElementById('educationLevel').addEventListener('change', function() {
-            const educationLevel = this.value;
-            document.getElementById('stream-field').classList.toggle('hidden', educationLevel !== "Undergraduate" && educationLevel !== "Postgraduate");
-        });
+        const schemes = [
+            { 
+                name: "PM Kisan Samman Nidhi", 
+                profession: "Farmer", 
+                incomeLimit: 600000, 
+                applyLink: "https://pmkisan.gov.in" 
+            },
+            { 
+                name: "Ayushman Bharat Yojana", 
+                profession: "Unemployed", 
+                incomeLimit: 500000, 
+                applyLink: "https://pmjay.gov.in" 
+            },
+            { 
+                name: "Maharashtra Scholarship Scheme", 
+                profession: "Student", 
+                incomeLimit: 800000, 
+                applyLink: "https://mahadbtmahait.gov.in" 
+            },
+            { 
+                name: "PM Awas Yojana", 
+                profession: "Self Employed", 
+                incomeLimit: 300000, 
+                applyLink: "https://pmaymis.gov.in" 
+            },
+            { 
+                name: "Mahatma Jyotiba Phule Karj Mafi Yojana", 
+                profession: "Farmer", 
+                incomeLimit: 800000, 
+                applyLink: "https://mjpkb.gov.in" 
+            }
+        ];
 
         document.getElementById('eligibilityForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const formData = {
-                age: parseInt(document.getElementById('age').value),
-                income: parseInt(document.getElementById('income').value),
-                caste: document.getElementById('caste').value,
-                gender: document.getElementById('gender').value,
-                profession: document.getElementById('profession').value,
-                landholding: document.getElementById('landholding').value || 0,
-                educationLevel: document.getElementById('educationLevel').value,
-                stream: document.getElementById('stream').value
-            };
+            const age = parseInt(document.getElementById('age').value);
+            const income = parseInt(document.getElementById('income').value);
+            const profession = document.getElementById('profession').value;
 
-            console.log("User Data:", formData);
-            document.getElementById('results').innerHTML = `<div class="alert alert-success">Eligibility check is under development.</div>`;
+            let eligibleSchemes = schemes.filter(scheme => scheme.profession === profession && income <= scheme.incomeLimit);
+            let resultHTML = "<h4>Eligible Schemes:</h4>";
+
+            if (eligibleSchemes.length > 0) {
+                eligibleSchemes.forEach(scheme => {
+                    resultHTML += `<p>${scheme.name} - <a href="${scheme.applyLink}" target="_blank" class="btn btn-success btn-sm">Apply Now</a></p>`;
+                });
+            } else {
+                resultHTML += "<p class='alert alert-danger'>No schemes found based on your details.</p>";
+            }
+
+            document.getElementById('results').innerHTML = resultHTML;
         });
     </script>
 </body>
