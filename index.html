@@ -71,6 +71,20 @@
                 </select>
             </div>
 
+            <!-- Education Level (Only for Students) -->
+            <div class="col-md-6 hidden" id="education-level-field">
+                <label for="educationLevel" class="form-label">Education Level</label>
+                <select class="form-select" id="educationLevel">
+                    <option value="">Select Level</option>
+                    <option value="Primary">Primary (1-5)</option>
+                    <option value="Middle">Middle (6-8)</option>
+                    <option value="HighSchool">High School (9-10)</option>
+                    <option value="HigherSecondary">Higher Secondary (11-12)</option>
+                    <option value="Undergraduate">Undergraduate</option>
+                    <option value="Postgraduate">Postgraduate</option>
+                </select>
+            </div>
+
             <div class="col-12 text-center">
                 <button type="submit" class="btn btn-primary me-2">Check Eligibility</button>
                 <button type="reset" class="btn btn-secondary">Reset</button>
@@ -81,6 +95,11 @@
     </div>
 
     <script>
+        document.getElementById('profession').addEventListener('change', function() {
+            const profession = this.value;
+            document.getElementById('education-level-field').classList.toggle('hidden', profession !== "Student");
+        });
+
         const schemes = [
             { 
                 name: "PM Kisan Samman Nidhi", 
@@ -97,6 +116,7 @@
             { 
                 name: "Maharashtra Scholarship Scheme", 
                 profession: "Student", 
+                educationLevel: ["HighSchool", "HigherSecondary", "Undergraduate"], 
                 incomeLimit: 800000, 
                 applyLink: "https://mahadbtmahait.gov.in" 
             },
@@ -105,12 +125,6 @@
                 profession: "Self Employed", 
                 incomeLimit: 300000, 
                 applyLink: "https://pmaymis.gov.in" 
-            },
-            { 
-                name: "Mahatma Jyotiba Phule Karj Mafi Yojana", 
-                profession: "Farmer", 
-                incomeLimit: 800000, 
-                applyLink: "https://mjpkb.gov.in" 
             }
         ];
 
@@ -119,8 +133,15 @@
             const age = parseInt(document.getElementById('age').value);
             const income = parseInt(document.getElementById('income').value);
             const profession = document.getElementById('profession').value;
+            const educationLevel = document.getElementById('educationLevel').value;
 
-            let eligibleSchemes = schemes.filter(scheme => scheme.profession === profession && income <= scheme.incomeLimit);
+            let eligibleSchemes = schemes.filter(scheme => {
+                if (scheme.profession !== profession) return false;
+                if (scheme.incomeLimit && income > scheme.incomeLimit) return false;
+                if (scheme.educationLevel && !scheme.educationLevel.includes(educationLevel)) return false;
+                return true;
+            });
+
             let resultHTML = "<h4>Eligible Schemes:</h4>";
 
             if (eligibleSchemes.length > 0) {
