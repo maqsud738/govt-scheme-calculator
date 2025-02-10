@@ -4,32 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO Optimized Title -->
     <title>Government Scheme Eligibility Checker - Find Sarkari Yojana Benefits</title>
 
-    <!-- SEO Description -->
-    <meta name="description" content="Easily check your eligibility for government schemes like PM Kisan, Ayushman Bharat, Awas Yojana, and more! Fast, free, and accurate Sarkari Yojana calculator.">
+    <meta name="description" content="Easily check your eligibility for government schemes like PM Kisan, Ayushman Bharat, Awas Yojana, and more! Fast, free, and accurate Sarkari Yojana calculator." />
+    <meta name="keywords" content="Government Scheme Eligibility Checker, Sarkari Yojana, PM Kisan, Ayushman Bharat, Pradhan Mantri Yojana, Subsidy Checker, Online Government Benefits" />
 
-    <!-- SEO Keywords -->
-    <meta name="keywords" content="Government Scheme Eligibility Checker, Sarkari Yojana, PM Kisan, Ayushman Bharat, Pradhan Mantri Yojana, Subsidy Checker, Online Government Benefits">
-
-    <!-- Open Graph Tags for Social Sharing -->
-    <meta property="og:title" content="Government Scheme Eligibility Checker - Find Your Benefits">
-    <meta property="og:description" content="Check which government schemes you qualify for in India with our free online calculator.">
-    <meta property="og:image" content="URL_TO_YOUR_LOGO_OR_IMAGE">
-    <meta property="og:url" content="https://maqsud738.github.io/govt-scheme-calculator/">
-    <meta property="og:type" content="website">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
+        body { background-color: #f8f9fa; }
         .calculator-container {
             max-width: 800px;
             margin: 2rem auto;
@@ -38,20 +21,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .scheme-card {
-            transition: transform 0.2s;
-        }
-        .scheme-card:hover {
-            transform: translateY(-5px);
-        }
-        .btn-primary {
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-        .btn-primary:hover {
-            background-color: #218838;
-            border-color: #1e7e34;
-        }
+        .hidden { display: none; } /* Hides fields dynamically */
     </style>
 </head>
 <body>
@@ -74,16 +44,10 @@
                 <label for="caste" class="form-label">Caste</label>
                 <select class="form-select" id="caste" required>
                     <option value="General">General</option>
-                    <option value="EWS">Economically Weaker Section (EWS)</option>
-                    <option value="OBC">Other Backward Class (OBC)</option>
-                    <option value="SC">Scheduled Caste (SC)</option>
-                    <option value="ST">Scheduled Tribe (ST)</option>
-                    <option value="VJNT">Vimukta Jati Nomadic Tribes (VJNT)</option>
-                    <option value="NT-A">Nomadic Tribe-A (NT-A)</option>
-                    <option value="NT-B">Nomadic Tribe-B (NT-B)</option>
-                    <option value="NT-C">Nomadic Tribe-C (NT-C)</option>
-                    <option value="NT-D">Nomadic Tribe-D (NT-D)</option>
-                    <option value="SBC">Special Backward Class (SBC)</option>
+                    <option value="OBC">OBC</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="EWS">EWS</option>
                 </select>
             </div>
 
@@ -97,10 +61,47 @@
             </div>
 
             <div class="col-md-4">
-                <label for="disability" class="form-label">Disability Status</label>
-                <select class="form-select" id="disability" required>
-                    <option value="No">No</option>
-                    <option value="Yes">Yes</option>
+                <label for="profession" class="form-label">Profession</label>
+                <select class="form-select" id="profession" required>
+                    <option value="">Select Profession</option>
+                    <option value="Farmer">Farmer</option>
+                    <option value="Student">Student</option>
+                    <option value="Self Employed">Self Employed</option>
+                    <option value="Salaried">Salaried</option>
+                    <option value="Unemployed">Unemployed</option>
+                </select>
+            </div>
+
+            <!-- Landholding Size (Only for Farmers) -->
+            <div class="col-md-6 hidden" id="landholding-field">
+                <label for="landholding" class="form-label">Landholding Size (Acres)</label>
+                <input type="number" class="form-control" id="landholding">
+            </div>
+
+            <!-- Education Level (Only for Students) -->
+            <div class="col-md-6 hidden" id="education-level-field">
+                <label for="educationLevel" class="form-label">Education Level</label>
+                <select class="form-select" id="educationLevel">
+                    <option value="">Select Level</option>
+                    <option value="Primary">Primary (1-5)</option>
+                    <option value="Middle">Middle (6-8)</option>
+                    <option value="HighSchool">High School (9-10)</option>
+                    <option value="HigherSecondary">Higher Secondary (11-12)</option>
+                    <option value="Undergraduate">Undergraduate</option>
+                    <option value="Postgraduate">Postgraduate</option>
+                </select>
+            </div>
+
+            <!-- Stream Selection (Only for Undergraduate & Postgraduate Students) -->
+            <div class="col-md-6 hidden" id="stream-field">
+                <label for="stream" class="form-label">Stream</label>
+                <select class="form-select" id="stream">
+                    <option value="">Select Stream</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Commerce">Commerce</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Science">Science</option>
                 </select>
             </div>
 
@@ -110,65 +111,36 @@
             </div>
         </form>
 
-        <!-- Results Display -->
         <div id="results" class="mt-4"></div>
     </div>
 
     <script>
-        // Government Schemes Database
-        const schemes = [
-            {
-                name: "EWS Reservation Benefits",
-                criteria: (data) => data.caste === "EWS" && data.income < 800000,
-                link: "https://www.india.gov.in/",
-                description: "Special reservations and benefits for EWS category."
-            },
-            {
-                name: "Post Matric Scholarship for SC Students",
-                criteria: (data) => data.caste === "SC" && data.income < 250000,
-                link: "https://scholarships.gov.in",
-                description: "Scholarship for SC students pursuing higher education."
-            },
-            {
-                name: "Post Matric Scholarship for ST Students",
-                criteria: (data) => data.caste === "ST" && data.income < 250000,
-                link: "https://scholarships.gov.in",
-                description: "Scholarship for ST students for college education."
-            },
-            {
-                name: "OBC Post Matric Scholarship",
-                criteria: (data) => data.caste === "OBC" && data.income < 200000,
-                link: "https://scholarships.gov.in",
-                description: "Financial aid for OBC students in higher education."
-            },
-            {
-                name: "VJNT & NT Scholarships",
-                criteria: (data) => ["VJNT", "NT-A", "NT-B", "NT-C", "NT-D"].includes(data.caste) && data.income < 250000,
-                link: "https://mahadbtmahait.gov.in",
-                description: "Scholarships for VJNT and NT category students."
-            },
-            {
-                name: "SBC Student Scholarship",
-                criteria: (data) => data.caste === "SBC" && data.income < 250000,
-                link: "https://mahadbtmahait.gov.in",
-                description: "Scholarship for Special Backward Class (SBC) students."
-            }
-        ];
+        document.getElementById('profession').addEventListener('change', function() {
+            const profession = this.value;
+            document.getElementById('landholding-field').classList.toggle('hidden', profession !== "Farmer");
+            document.getElementById('education-level-field').classList.toggle('hidden', profession !== "Student");
+        });
+
+        document.getElementById('educationLevel').addEventListener('change', function() {
+            const educationLevel = this.value;
+            document.getElementById('stream-field').classList.toggle('hidden', educationLevel !== "Undergraduate" && educationLevel !== "Postgraduate");
+        });
 
         document.getElementById('eligibilityForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
             const formData = {
+                age: parseInt(document.getElementById('age').value),
                 income: parseInt(document.getElementById('income').value),
-                caste: document.getElementById('caste').value
+                caste: document.getElementById('caste').value,
+                gender: document.getElementById('gender').value,
+                profession: document.getElementById('profession').value,
+                landholding: document.getElementById('landholding').value || 0,
+                educationLevel: document.getElementById('educationLevel').value,
+                stream: document.getElementById('stream').value
             };
 
-            const eligibleSchemes = schemes.filter(scheme => scheme.criteria(formData));
-
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = eligibleSchemes.length
-                ? eligibleSchemes.map(scheme => `<div class="card"><h5>${scheme.name}</h5><p>${scheme.description}</p><a href="${scheme.link}">Apply Now</a></div>`).join('')
-                : `<div class="alert alert-info">No eligible schemes found.</div>`;
+            console.log("User Data:", formData);
+            document.getElementById('results').innerHTML = `<div class="alert alert-success">Eligibility check is under development.</div>`;
         });
     </script>
 </body>
