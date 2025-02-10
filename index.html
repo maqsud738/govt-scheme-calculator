@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Government Scheme Eligibility Checker - Find Sarkari Yojana Benefits</title>
-
-    <meta name="description" content="Easily check your eligibility for government schemes like PM Kisan, Ayushman Bharat, Awas Yojana, and more! Fast, free, and accurate Sarkari Yojana calculator." />
-    <meta name="keywords" content="Government Scheme Eligibility Checker, Sarkari Yojana, PM Kisan, Ayushman Bharat, Pradhan Mantri Yojana, Subsidy Checker, Online Government Benefits" />
+    <title>Government Scheme Eligibility Checker</title>
+    <meta name="description" content="Check eligibility for government schemes like PM Kisan, Ayushman Bharat, Awas Yojana, and more!" />
+    <meta name="keywords" content="Government Scheme Eligibility Checker, PM Kisan, Ayushman Bharat, Subsidy Checker" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -85,6 +84,17 @@
                 </select>
             </div>
 
+            <!-- Farmer Landholding (Only for Farmers) -->
+            <div class="col-md-6 hidden" id="farmer-landholding-field">
+                <label for="farmerLand" class="form-label">Farmer Land Holding</label>
+                <select class="form-select" id="farmerLand">
+                    <option value="">Select Land Holding</option>
+                    <option value="small">Small Farmer (Less than 2 hectares)</option>
+                    <option value="medium">Medium Farmer (2-5 hectares)</option>
+                    <option value="large">Large Farmer (More than 5 hectares)</option>
+                </select>
+            </div>
+
             <div class="col-12 text-center">
                 <button type="submit" class="btn btn-primary me-2">Check Eligibility</button>
                 <button type="reset" class="btn btn-secondary">Reset</button>
@@ -98,33 +108,30 @@
         document.getElementById('profession').addEventListener('change', function() {
             const profession = this.value;
             document.getElementById('education-level-field').classList.toggle('hidden', profession !== "Student");
+            document.getElementById('farmer-landholding-field').classList.toggle('hidden', profession !== "Farmer");
         });
 
         const schemes = [
             { 
                 name: "PM Kisan Samman Nidhi", 
                 profession: "Farmer", 
+                landHolding: ["small", "medium", "large"], 
                 incomeLimit: 600000, 
                 applyLink: "https://pmkisan.gov.in" 
             },
             { 
-                name: "Ayushman Bharat Yojana", 
-                profession: "Unemployed", 
-                incomeLimit: 500000, 
-                applyLink: "https://pmjay.gov.in" 
-            },
-            { 
-                name: "Maharashtra Scholarship Scheme", 
-                profession: "Student", 
-                educationLevel: ["HighSchool", "HigherSecondary", "Undergraduate"], 
+                name: "PM Kusum Yojana", 
+                profession: "Farmer", 
+                landHolding: ["small", "medium"], 
                 incomeLimit: 800000, 
-                applyLink: "https://mahadbtmahait.gov.in" 
+                applyLink: "https://pmkusum.gov.in" 
             },
             { 
-                name: "PM Awas Yojana", 
-                profession: "Self Employed", 
-                incomeLimit: 300000, 
-                applyLink: "https://pmaymis.gov.in" 
+                name: "Fasal Bima Yojana", 
+                profession: "Farmer", 
+                landHolding: ["small", "medium", "large"], 
+                incomeLimit: 1000000, 
+                applyLink: "https://pmfby.gov.in" 
             }
         ];
 
@@ -133,12 +140,12 @@
             const age = parseInt(document.getElementById('age').value);
             const income = parseInt(document.getElementById('income').value);
             const profession = document.getElementById('profession').value;
-            const educationLevel = document.getElementById('educationLevel').value;
+            const landHolding = document.getElementById('farmerLand').value;
 
             let eligibleSchemes = schemes.filter(scheme => {
                 if (scheme.profession !== profession) return false;
                 if (scheme.incomeLimit && income > scheme.incomeLimit) return false;
-                if (scheme.educationLevel && !scheme.educationLevel.includes(educationLevel)) return false;
+                if (scheme.profession === "Farmer" && (!scheme.landHolding.includes(landHolding))) return false;
                 return true;
             });
 
