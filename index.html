@@ -105,35 +105,19 @@
     </div>
 
     <script>
-        document.getElementById('profession').addEventListener('change', function() {
-            const profession = this.value;
-            document.getElementById('education-level-field').classList.toggle('hidden', profession !== "Student");
-            document.getElementById('farmer-landholding-field').classList.toggle('hidden', profession !== "Farmer");
-        });
+        fetch('schemes.json')
+  .then(response => response.json())
+  .then(data => {
+    let schemeList = document.getElementById("scheme-list");
+    data.schemes.forEach(scheme => {
+      let listItem = document.createElement("li");
+      listItem.innerHTML = `<strong>${scheme.name}</strong> - ${scheme.benefits} 
+      <br> <a href="${scheme.link}" target="_blank">More Info</a>`;
+      schemeList.appendChild(listItem);
+    });
+  })
+  .catch(error => console.error("Error loading schemes:", error));
 
-        const schemes = [
-            { 
-                name: "PM Kisan Samman Nidhi", 
-                profession: "Farmer", 
-                landHolding: ["small", "medium", "large"], 
-                incomeLimit: 600000, 
-                applyLink: "https://pmkisan.gov.in" 
-            },
-            { 
-                name: "PM Kusum Yojana", 
-                profession: "Farmer", 
-                landHolding: ["small", "medium"], 
-                incomeLimit: 800000, 
-                applyLink: "https://pmkusum.gov.in" 
-            },
-            { 
-                name: "Fasal Bima Yojana", 
-                profession: "Farmer", 
-                landHolding: ["small", "medium", "large"], 
-                incomeLimit: 1000000, 
-                applyLink: "https://pmfby.gov.in" 
-            }
-        ];
 
         document.getElementById('eligibilityForm').addEventListener('submit', function(e) {
             e.preventDefault();
