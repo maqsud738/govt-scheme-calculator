@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     
     <title>Government Scheme Eligibility Checker</title>
     <meta name="description" content="Check eligibility for government schemes like PM Kisan, Ayushman Bharat, Awas Yojana, and more!" />
@@ -82,6 +82,23 @@
                 </select>
             </div>
 
+            <!-- Stream Selection (Only for Undergraduate or Postgraduate Students) -->
+            <div class="col-md-6 hidden" id="stream-field">
+                <label for="stream" class="form-label">Stream</label>
+                <select class="form-select" id="stream">
+                    <option value="">Select Stream</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Science">Science</option>
+                    <option value="Management">Management</option>
+                    <option value="Law">Law</option>
+                    <option value="Agriculture">Agriculture</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Commerce">Commerce</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+
             <!-- Farmer Landholding (Only for Farmers) -->
             <div class="col-md-6 hidden" id="farmer-landholding-field">
                 <label for="farmerLand" class="form-label">Farmer Land Holding</label>
@@ -109,14 +126,16 @@
             document.getElementById('farmer-landholding-field').classList.toggle('hidden', profession !== "Farmer");
         });
 
+        document.getElementById('educationLevel').addEventListener('change', function() {
+            const level = this.value;
+            document.getElementById('stream-field').classList.toggle('hidden', level !== "Undergraduate" && level !== "Postgraduate");
+        });
+
         const schemes = [
             { name: "PM Kisan Samman Nidhi", profession: "Farmer", landHolding: ["small", "medium", "large"], incomeLimit: 600000, applyLink: "https://pmkisan.gov.in" },
             { name: "PM Kusum Yojana", profession: "Farmer", landHolding: ["small", "medium"], incomeLimit: 800000, applyLink: "https://pmkusum.gov.in" },
             { name: "Fasal Bima Yojana", profession: "Farmer", landHolding: ["small", "medium", "large"], incomeLimit: 1000000, applyLink: "https://pmfby.gov.in" },
             
-            { name: "Maharashtra Krishi Sanjeevani Yojana", profession: "Farmer", landHolding: ["small", "medium"], incomeLimit: 700000, applyLink: "https://maharashtra.gov.in/krishisanjeevani" },
-            { name: "PM Fasal Bima Yojana (Maharashtra)", profession: "Farmer", landHolding: ["small", "medium", "large"], incomeLimit: 900000, applyLink: "https://pmfby.gov.in/maharashtra" },
-
             { name: "National Scholarship Portal (NSP)", profession: "Student", educationLevel: ["HighSchool", "HigherSecondary", "Undergraduate", "Postgraduate"], incomeLimit: 800000, applyLink: "https://scholarships.gov.in" },
             { name: "Post Matric Scholarship (Maharashtra)", profession: "Student", educationLevel: ["HighSchool", "HigherSecondary", "Undergraduate", "Postgraduate"], incomeLimit: 600000, applyLink: "https://mahadbtmahait.gov.in" },
             { name: "Maharashtra Rajarshi Shahu Maharaj Scholarship", profession: "Student", educationLevel: ["Undergraduate", "Postgraduate"], incomeLimit: 800000, applyLink: "https://mahadbtmahait.gov.in" }
@@ -126,10 +145,9 @@
             e.preventDefault();
             const income = parseInt(document.getElementById('income').value);
             const profession = document.getElementById('profession').value;
-            const landHolding = document.getElementById('farmerLand').value;
             const educationLevel = document.getElementById('educationLevel').value;
 
-            let eligibleSchemes = schemes.filter(scheme => scheme.profession === profession && (!scheme.incomeLimit || income <= scheme.incomeLimit) && (!scheme.landHolding || scheme.landHolding.includes(landHolding)) && (!scheme.educationLevel || scheme.educationLevel.includes(educationLevel)));
+            let eligibleSchemes = schemes.filter(scheme => scheme.profession === profession && (!scheme.incomeLimit || income <= scheme.incomeLimit) && (!scheme.educationLevel || scheme.educationLevel.includes(educationLevel)));
 
             document.getElementById('results').innerHTML = eligibleSchemes.length ? eligibleSchemes.map(s => `<p>${s.name} - <a href="${s.applyLink}" target="_blank" class="btn btn-success btn-sm">Apply Now</a></p>`).join('') : "<p class='alert alert-danger'>No schemes found.</p>";
         });
